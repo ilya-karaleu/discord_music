@@ -3,3 +3,4 @@ PyNaCl
 yt-dlp>=2024.10.00
 curl-cffi
 Flask
+aiohttp
