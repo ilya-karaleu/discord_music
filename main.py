@@ -15,7 +15,7 @@ queues = {}
 
 # Настройки yt-dlp для быстрого сбора ссылок из плейлистов
 ytdl_format_options_search = {
-    'format': 'bestaudio/best',
+    'format': 'ba/b',
     'extract_flat': 'in_playlist', 
     'noplaylist': False,           
     'ignoreerrors': True,          
@@ -24,7 +24,7 @@ ytdl_format_options_search = {
     'default_search': 'auto',
     'source_address': '0.0.0.0',
     'playlistend': 50,
-    'cookiefile': 'cookies.txt'
+    'cookiefile': 'cookies.txt',
     # Удали отсюда блок extractor_args с длинными ключами
 }
 
@@ -104,6 +104,7 @@ async def play(interaction: discord.Interaction, url: str):
     if po_token and visitor_data:
         extractor_args = {
             'youtube': {
+                'player_client': ['android', 'web'],
                 'po_token': [f"web+{po_token}"],
                 'visitor_data': [visitor_data]
             }
