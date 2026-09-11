@@ -22,7 +22,8 @@ ytdl_format_options_search = {
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
-    'playlistend': 50  # Ограничение джемов и плейлистов до 50 треков
+    'playlistend': 50,  # Ограничение джемов и плейлистов до 50 треков
+    'extractor_args': {'youtube': {'player_client': ['tv_downgraded', 'web']}}
 }
 
 ytdl_format_options_stream = dict(ytdl_format_options_search)
