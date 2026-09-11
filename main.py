@@ -5,6 +5,7 @@ import yt_dlp
 import asyncio
 import os
 from keep_alive import keep_alive
+import aiohttp
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -23,13 +24,8 @@ ytdl_format_options_search = {
     'default_search': 'auto',
     'source_address': '0.0.0.0',
     'playlistend': 50,
-    'cookiefile': 'cookies.txt',
-    'extractor_args': {
-        'youtube': {
-            'po_token': ['web+MlMWu2RW6neWYhaHEi7sMm1_hPZnEzzIwRbvORHwvg2uE5sKOT9KnybJ746pjkDJ6ViMsxaOIJ1tLtYOwpxYGurwPbPrStDdxl3SmtYdU3oC9PNPKA=='],
-            'visitor_data': ['CgtlejByZ0NVck5KOCjA8pHVBjIKCgJCWRIEGgAgYmLfAgrcAjIxLllUPUJxZ1NmeHk4TFR6SGZQS1VySjJWQm1iTE5YMzRpMHd4YTVrd3RfQW54bTlUSjZTVEZidFRPRjNqcHR3bmVnMTdtRFpvT2QxYXlubE85REdZTzJKYXJ2MmhSWlJIZUoxQzdZamE0blRLcG5HbkN6Wm4xc3VaLUlYN2twTjlybU5Wc0x2RDA2TFJDdUpIN1JZbG4zdUp3cW44clVWTXdaTXhxSjktWHp6RlJkWmdGVzcxb3JBSENGYzVraHdPdzQwYWFLdTAzOGRYZ2UxcHhqNWI1YUlPRUpiejhKRmtFM0o4YTdoS21GbXhQU1E4VlB2V1pZMTJ2YllFZ3JUN2Z2c0l6RHZxRGxYNWJjVVBicDFjbVEwYzRWRmg2ZWF4YmhwX1QxLVpLbFpwM2xFcElOdFI3WjRQSUI2WE8zbkVjRTRuWk5CeDdUZTEwQ3NMXzJBQk1jZjNZdw%3D%3D']
-        }
-    }
+    'cookiefile': 'cookies.txt'
+    # Удали отсюда блок extractor_args с длинными ключами
 }
 
 ytdl_format_options_stream = dict(ytdl_format_options_search)
@@ -44,6 +40,19 @@ ffmpeg_options = {
 
 ytdl_search = yt_dlp.YoutubeDL(ytdl_format_options_search)
 ytdl_stream = yt_dlp.YoutubeDL(ytdl_format_options_stream)
+
+async def fetch_fresh_tokens():
+    # Замени на реальную ссылку твоего микросервиса на Render!
+    provider_url = "https://tvoy-po-token-provider.onrender.com/token" 
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(provider_url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    return data.get("po_token"), data.get("visitor_data")
+    except Exception as e:
+        print(f"Ошибка связи с API токенов: {e}")
+    return None, None
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -89,6 +98,20 @@ async def play(interaction: discord.Interaction, url: str):
         return
 
     await interaction.response.defer()
+
+    # --- ЗАПРАШИВАЕМ И ПРИМЕНЯЕМ СВЕЖИЕ ТОКЕНЫ ---
+    po_token, visitor_data = await fetch_fresh_tokens()
+    if po_token and visitor_data:
+        extractor_args = {
+            'youtube': {
+                'po_token': [f"web+{po_token}"],
+                'visitor_data': [visitor_data]
+            }
+        }
+        # Применяем токены для поиска (ytdl_search) и для скачивания (ytdl_stream)
+        ytdl_search.params['extractor_args'] = extractor_args
+        ytdl_stream.params['extractor_args'] = extractor_args
+    # ---------------------------------------------
 
     channel = interaction.user.voice.channel
     voice_client = interaction.guild.voice_client
