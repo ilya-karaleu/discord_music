@@ -97,6 +97,12 @@ async def play(interaction: discord.Interaction, url: str):
         loop = bot.loop
         data = await loop.run_in_executor(None, lambda: ytdl_search.extract_info(url, download=False))
 
+        # --- ДОБАВЛЯЕМ ЭТУ ПРОВЕРКУ ---
+        if data is None:
+            await interaction.followup.send("❌ Не удалось загрузить трек. Возможно, видео скрыто, удалено, или YouTube временно заблокировал запрос.")
+            return
+        # ------------------------------
+
         if 'entries' in data:
             entries = [e for e in data['entries'] if e][:50]
             for entry in entries:
@@ -114,6 +120,7 @@ async def play(interaction: discord.Interaction, url: str):
 
     except Exception as e:
         await interaction.followup.send(f"Произошла ошибка при загрузке: {e}")
+
 
 @bot.tree.command(name="skip", description="Пропустить текущий трек")
 async def skip(interaction: discord.Interaction):
