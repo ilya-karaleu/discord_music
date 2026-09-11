@@ -21,17 +21,16 @@ ytdl_format_options_search = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '::',
-    'playlistend': 50,  # Ограничение джемов и плейлистов до 50 треков
+    'source_address': '0.0.0.0',   # Возвращаем стандартный адрес
+    'playlistend': 50,
+    'cookiefile': 'cookies.txt',    # <--- БОТ БУДЕТ ЧИТАТЬ КУКИ ОТСЮДА
+    'impersonate': 'chrome',       # Маскировка TLS под Chrome
     'extractor_args': {
         'youtube': {
-            # Притворяемся Android-устройством или телевизором
-            'player_client': ['android', 'ios', 'tv', 'web'],
-            # Ускоряем запросы, пропуская загрузку лишних конфигов YouTube
-            'player_skip': ['webpage', 'configs']
+            'po_token': ['web+MlMWu2RW6neWYhaHEi7sMm1_hPZnEzzIwRbvORHwvg2uE5sKOT9KnybJ746pjkDJ6ViMsxaOIJ1tLtYOwpxYGurwPbPrStDdxl3SmtYdU3oC9PNPKA=='],
+            'visitor_data': ['CgtlejByZ0NVck5KOCjA8pHVBjIKCgJCWRIEGgAgYmLfAgrcAjIxLllUPUJxZ1NmeHk4TFR6SGZQS1VySjJWQm1iTE5YMzRpMHd4YTVrd3RfQW54bTlUSjZTVEZidFRPRjNqcHR3bmVnMTdtRFpvT2QxYXlubE85REdZTzJKYXJ2MmhSWlJIZUoxQzdZamE0blRLcG5HbkN6Wm4xc3VaLUlYN2twTjlybU5Wc0x2RDA2TFJDdUpIN1JZbG4zdUp3cW44clVWTXdaTXhxSjktWHp6RlJkWmdGVzcxb3JBSENGYzVraHdPdzQwYWFLdTAzOGRYZ2UxcHhqNWI1YUlPRUpiejhKRmtFM0o4YTdoS21GbXhQU1E4VlB2V1pZMTJ2YllFZ3JUN2Z2c0l6RHZxRGxYNWJjVVBicDFjbVEwYzRWRmg2ZWF4YmhwX1QxLVpLbFpwM2xFcElOdFI3WjRQSUI2WE8zbkVjRTRuWk5CeDdUZTEwQ3NMXzJBQk1jZjNZdw%3D%3D']
         }
-    },
-    'proxy': 'http://45.10.163.12'
+    }
 }
 
 ytdl_format_options_stream = dict(ytdl_format_options_search)
