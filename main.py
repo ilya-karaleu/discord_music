@@ -21,10 +21,9 @@ ytdl_format_options_search = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0',   # Возвращаем стандартный адрес
+    'source_address': '0.0.0.0',
     'playlistend': 50,
-    'cookiefile': 'cookies.txt',    # <--- БОТ БУДЕТ ЧИТАТЬ КУКИ ОТСЮДА
-    'impersonate': 'chrome',       # Маскировка TLS под Chrome
+    'cookiefile': 'cookies.txt',
     'extractor_args': {
         'youtube': {
             'po_token': ['web+MlMWu2RW6neWYhaHEi7sMm1_hPZnEzzIwRbvORHwvg2uE5sKOT9KnybJ746pjkDJ6ViMsxaOIJ1tLtYOwpxYGurwPbPrStDdxl3SmtYdU3oC9PNPKA=='],
