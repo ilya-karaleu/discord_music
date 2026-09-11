@@ -21,9 +21,17 @@ ytdl_format_options_search = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0',
+    'source_address': '::',
     'playlistend': 50,  # Ограничение джемов и плейлистов до 50 треков
-    'extractor_args': {'youtube': {'player_client': ['tv_downgraded', 'web']}}
+    'extractor_args': {
+        'youtube': {
+            # Притворяемся Android-устройством или телевизором
+            'player_client': ['android', 'ios', 'tv', 'web'],
+            # Ускоряем запросы, пропуская загрузку лишних конфигов YouTube
+            'player_skip': ['webpage', 'configs']
+        }
+    },
+    'proxy': 'http://45.10.163.12'
 }
 
 ytdl_format_options_stream = dict(ytdl_format_options_search)
